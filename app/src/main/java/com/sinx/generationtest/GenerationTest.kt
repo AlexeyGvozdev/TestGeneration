@@ -26,23 +26,21 @@ fun createTest(operation: Operation, oldValue: String, newValue: String) {
     val main = FunSpec.builder("case_${oldValue}_${operation}_equals_${newValue}")
         .addCode(
             """
-                val oldValue = $oldValue
-                val operation = $operation
-                val counter = Counter(oldValue)
-                val targetValue = "$newValue"
-                assertEquals(targetValue, counter.change(operation))
-        """.trimIndent()
+                |val oldValue = $oldValue
+                |val operation = $operation
+                |val counter = Counter(oldValue)
+                |val targetValue = "$newValue"
+                |assertEquals(targetValue, counter.change(operation))
+        """.trimMargin()
         )
-        .addComment("$oldValue $nameOperation = $newValue")
         .addModifiers(KModifier.FUN)
+        .addKdoc("$oldValue $nameOperation 1 = $newValue", "asd")
         .addAnnotation(ClassName("org.junit", "Test"))
         .build()
     typeSpec.addFunction(main)
 }
 
 fun closeTest(dir: String) {
-    val format: String = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.US).format(Calendar.getInstance().time)
-    val fileName = "counter_test_$format.txt"
     val file = File(dir)
     file.createNewFile()
     fileSpec.addType(typeSpec.build()).build().writeTo(file)
